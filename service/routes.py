@@ -62,7 +62,14 @@ def create_accounts():
 ######################################################################
 
 # ... place you code here to LIST accounts ...
+@app.route("/accounts", methods=["GET"])
+def list_all_accounts():
+    """Lists all accounts"""
+    app.logger.info("Request to list all Accounts")
+    accounts = Account.all()
+    account_list = [account.serialize() for account in accounts]
 
+    return jsonify(account_list), status.HTTP_200_OK
 
 ######################################################################
 # READ AN ACCOUNT
@@ -82,6 +89,8 @@ def read_an_account(id):
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
+
+# ... place you code here to READ an account ...
 @app.route("/accounts/<id>", methods=["PUT"])
 def update_accounts(id):
     """
