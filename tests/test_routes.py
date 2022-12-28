@@ -137,4 +137,18 @@ class TestAccountService(TestCase):
         """It should return 404 not found"""
         response = self.client.get(f"{BASE_URL}/0",
                                      content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)                                                              
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  
+
+    def test_delete_an_account(self):
+        """It should Delete an Account"""
+        account = self._create_accounts(1)[0]
+        response = self.client.delete(f"{BASE_URL}/{account.id}",
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_an_account_not_found(self):
+        """It should return 204 not found"""
+        response = self.client.delete(f"{BASE_URL}/7",
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)    
+                                                                   
