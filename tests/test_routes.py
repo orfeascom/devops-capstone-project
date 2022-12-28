@@ -172,4 +172,21 @@ class TestAccountService(TestCase):
         """It should return 404 not found"""
         test_account = AccountFactory()
         response = self.client.put(f"{BASE_URL}/44", json=test_account.serialize())
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)          
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        
+    def test_list_all_accounts(self):
+        """It should return a list of all Accounts"""
+        self._create_accounts(5)
+        response = self.client.get(BASE_URL,
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
+
+    def test_empty_list(self):
+        """It should return an empty list"""
+        response = self.client.get(BASE_URL,
+                                    content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 0)                          
