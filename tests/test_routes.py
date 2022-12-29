@@ -127,31 +127,26 @@ class TestAccountService(TestCase):
     def test_read_an_account(self):
         """It should Read a single Account"""
         account = self._create_accounts(1)[0]
-        response = self.client.get(f"{BASE_URL}/{account.id}",
-                                     content_type="application/json")
+        response = self.client.get(f"{BASE_URL}/{account.id}", content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data["name"], account.name)
 
     def test_account_not_found(self):
         """It should return 404 not found"""
-        response = self.client.get(f"{BASE_URL}/0",
-                                     content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  
+        response = self.client.get(f"{BASE_URL}/0", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_an_account(self):
         """It should Delete an Account"""
         account = self._create_accounts(1)[0]
-        response = self.client.delete(f"{BASE_URL}/{account.id}",
-                                    content_type="application/json")
+        response = self.client.delete(f"{BASE_URL}/{account.id}", content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_an_account_not_found(self):
         """It should return 204 not found"""
-        response = self.client.delete(f"{BASE_URL}/7",
-                                    content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)  
-
+        response = self.client.delete(f"{BASE_URL}/7", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_update_account(self):
         """It should Update an existing Account"""
@@ -166,27 +161,25 @@ class TestAccountService(TestCase):
         response = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_account = response.get_json()
-        self.assertEqual(updated_account["name"], "Charlie Patino")  
+        self.assertEqual(updated_account["name"], "Charlie Patino")
 
     def test_update_account_not_exist(self):
         """It should return 404 not found"""
         test_account = AccountFactory()
         response = self.client.put(f"{BASE_URL}/44", json=test_account.serialize())
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        
+
     def test_list_all_accounts(self):
         """It should return a list of all Accounts"""
         self._create_accounts(5)
-        response = self.client.get(BASE_URL,
-                                    content_type="application/json")
+        response = self.client.get(BASE_URL, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(len(data), 5)
 
     def test_empty_list(self):
         """It should return an empty list"""
-        response = self.client.get(BASE_URL,
-                                    content_type="application/json")
+        response = self.client.get(BASE_URL, content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(len(data), 0)
@@ -194,4 +187,4 @@ class TestAccountService(TestCase):
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
         response = self.client.delete(BASE_URL)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)                                  
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
